@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nipponfarm — ภาพรวมฟาร์ม</title>
+<meta name="theme-color" content="#EDE7DB">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="tag-mark">NF</span>
+      <h1>Nipponfarm</h1>
+    </div>
+    <div class="topbar-meta">
+      <span id="today-date">—</span>
+      <span class="divider">·</span>
+      <span id="weather">กำลังโหลดอากาศ…</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Section: ภาพรวมฟาร์มวันนี้ -->
+    <section class="ledger-block">
+      <h2>ภาพรวมฟาร์มวันนี้</h2>
+      <div class="stat-strip" id="stat-strip">
+        <!-- filled by JS -->
+      </div>
+    </section>
+
+    <!-- Section: งานวันนี้ -->
+    <section class="ledger-block">
+      <div class="block-head">
+        <h2>งานวันนี้</h2>
+        <span class="count-pill" id="task-count">0 รายการ</span>
+      </div>
+      <ul class="log-list" id="task-list">
+        <!-- filled by JS -->
+      </ul>
+      <p class="empty-note" id="task-empty" hidden>ไม่มีงานค้างสำหรับวันนี้</p>
+    </section>
+
+    <!-- Section: ใกล้คลอด -->
+    <section class="ledger-block">
+      <h2>ใกล้คลอด (ภายใน 7 วัน)</h2>
+      <ul class="log-list" id="farrow-list">
+        <!-- filled by JS -->
+      </ul>
+      <p class="empty-note" id="farrow-empty" hidden>ยังไม่มีแม่พันธุ์ใกล้คลอดในสัปดาห์นี้</p>
+    </section>
+
+    <!-- Section: รออนุมัติ -->
+    <section class="ledger-block">
+      <h2>รออนุมัติ</h2>
+      <ul class="approval-list" id="approval-list">
+        <!-- filled by JS -->
+      </ul>
+      <p class="empty-note" id="approval-empty" hidden>ไม่มีรายการรออนุมัติ</p>
+    </section>
+
+  </main>
+
+  <footer class="data-note">
+    <span id="data-source-note">แสดงข้อมูลตัวอย่าง — ยังไม่เชื่อมฐานข้อมูลจริง</span>
+  </footer>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+:root {
+  /* Palette — barn ledger, not SaaS. Named for what they mean on the farm. */
+  --limewash:      #EDE7DB;  /* page background — whitewashed barn wall */
+  --paper:         #F7F4EC;  /* section background — feed-record paper */
+  --ink:           #2B241D;  /* primary text — dark barn wood */
+  --ink-soft:      #6B6154;  /* secondary text — weathered wood */
+  --rule:          #D9D0BE;  /* hairline dividers */
+  --pasture:       #55704A;  /* on-track / healthy */
+  --pasture-tint:  #EDF1E7;
+  --amber:         #B4802B;  /* due soon */
+  --amber-tint:    #F7EEDD;
+  --rust:          #A8422F;  /* overdue / urgent */
+  --rust-tint:     #F5E6E1;
+
+  --font-display: 'Taviraj', serif;
+  --font-body: 'Sarabun', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--limewash);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 20px clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.tag-mark {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  padding: 3px 7px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+
+.topbar-brand h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22px;
+  margin: 0;
+  color: var(--ink);
+}
+
+.topbar-meta {
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.topbar-meta .divider {
+  margin: 0 6px;
+}
+
+/* ---------- Layout ---------- */
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 8px clamp(16px, 4vw, 40px) 48px;
+}
+
+.ledger-block {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.ledger-block h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+
+.block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.block-head h2 { margin: 0; }
+
+.count-pill {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Stat strip: numbers in a row, ledger-style, not boxed cards ---------- */
+.stat-strip {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stat {
+  padding: 0 20px 0 0;
+  margin-right: 20px;
+  border-right: 1px solid var(--rule);
+}
+.stat:last-child { border-right: none; margin-right: 0; }
+
+.stat .value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.stat .label {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+/* ---------- Log list: rows with a status bar on the left, not shadowed cards ---------- */
+.log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.log-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+.log-row:first-child { border-top: none; }
+
+.status-bar {
+  align-self: stretch;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--pasture);
+  flex-shrink: 0;
+}
+.status-bar.due-soon { background: var(--amber); }
+.status-bar.overdue { background: var(--rust); }
+
+.log-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.log-title {
+  font-weight: 500;
+  margin: 0 0 2px;
+}
+
+.log-sub {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.log-when {
+  font-size: 13.5px;
+  white-space: nowrap;
+  text-align: right;
+}
+.log-when.due-soon { color: var(--amber); }
+.log-when.overdue { color: var(--rust); }
+.log-when.ok { color: var(--ink-soft); }
+
+/* ---------- Approvals ---------- */
+.approval-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.approval-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--rule);
+}
+.approval-row:first-child { border-top: none; }
+
+.approval-count {
+  font-family: var(--font-display);
+  font-size: 15px;
+}
+
+.approval-tag {
+  font-size: 13px;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: var(--amber-tint);
+  color: var(--amber);
+}
+
+/* ---------- Empty state ---------- */
+.empty-note {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  padding: 4px 0 0;
+}
+
+/* ---------- Footer ---------- */
+.data-note {
+  text-align: center;
+  padding: 18px 16px 32px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .topbar-brand h1 { font-size: 19px; }
+  .stat-strip { gap: 14px 0; }
+  .stat { padding-right: 14px; margin-right: 14px; }
+  .stat .value { font-size: 24px; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ---------- Focus visibility ---------- */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--pasture);
+  outline-offset: 2px;
+}
