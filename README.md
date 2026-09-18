@@ -10,14 +10,19 @@
 
 ```
 Nipponfarm-1992/
-├── index.html          หน้า Overview หลัก
-├── manifest.json        PWA manifest (ต้องเพิ่มไฟล์ไอคอนใน icons/ ก่อนใช้งานจริง)
+├── index.html              หน้า Overview หลัก
+├── manifest.json            PWA manifest (ต้องเพิ่มไฟล์ไอคอนใน icons/ ก่อนใช้งานจริง)
 ├── css/
-│   └── style.css        ธีมและ layout ทั้งหมด
+│   └── style.css            ธีมและ layout ทั้งหมด
 ├── js/
-│   ├── mock-data.js      ข้อมูลตัวอย่าง — รูปร่างเดียวกับที่จะมาจาก Supabase
-│   └── app.js            ตรรกะดึงข้อมูลและ render หน้าจอ
-└── icons/                (ว่าง — รอไฟล์ไอคอนสำหรับ PWA)
+│   ├── mock-data.js          ข้อมูลตัวอย่าง — รูปร่างเดียวกับที่จะมาจาก Supabase
+│   ├── app.js                ตรรกะดึงข้อมูลและ render หน้าจอ
+│   └── supabase-client.js    stub เชื่อมต่อ Supabase (ยังไม่ได้ใส่ค่าจริง)
+├── pages/                    หน้าจอของเฟสถัดไป (แม่พันธุ์, ปฏิทิน, ผังคอก, การเงิน, พนักงาน)
+├── docs/
+│   └── schema.sql            โครงสร้างตารางฐานข้อมูล เฟส 1 (SQL, ยังไม่ได้รันจริง)
+├── icons/                    ไอคอนสำหรับ PWA (ยังว่าง)
+└── assets/                   รูปภาพ/ไฟล์สื่ออื่นๆ (ยังว่าง)
 ```
 
 ## แนวทางออกแบบ
@@ -30,10 +35,11 @@ Nipponfarm-1992/
 
 ## จุดที่ต้องต่อในเฟสถัดไป
 
-1. **เชื่อม Supabase** — แก้ฟังก์ชัน `getOverviewData()` ใน `js/app.js` ให้ query จริงแทนการอ่านจาก `MOCK_DATA` (มี comment ระบุ query ตัวอย่างไว้ในไฟล์แล้ว)
-2. **ตารางฐานข้อมูล** ที่ออกแบบไว้สำหรับเฟสนี้: `staff`, `pens`, `pigs`, `task_types`, `tasks`, `pig_events`
+1. **สร้างตารางจริงบน Supabase** — รัน `docs/schema.sql` บนโปรเจกต์ Supabase (ตาราง `staff`, `pens`, `pigs`, `task_types`, `tasks`, `pig_events`)
+2. **เชื่อม Supabase ฝั่งหน้าเว็บ** — ใส่ URL/anon key ใน `js/supabase-client.js` แล้วแก้ฟังก์ชัน `getOverviewData()` ใน `js/app.js` ให้ query จริงแทนการอ่านจาก `MOCK_DATA` (มี comment ระบุ query ตัวอย่างไว้ในไฟล์แล้ว)
 3. **สภาพอากาศ** — ปัจจุบันเป็นข้อความ placeholder ใน `js/app.js` ยังไม่เรียก weather API จริง
 4. **ไอคอน PWA** — เพิ่มไฟล์ `icons/icon-192.png` และ `icons/icon-512.png`
+5. **หน้าจอเฟสถัดไป** — สร้างไฟล์ในโฟลเดอร์ `pages/` (เช่น `pages/pigs.html`, `pages/calendar.html`, `pages/pens.html`, `pages/finance.html`, `pages/staff.html`)
 
 ## เฟสถัดไปของทั้งระบบ
 
