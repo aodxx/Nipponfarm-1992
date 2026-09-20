@@ -56,7 +56,12 @@ async function getOverviewData() {
     supabaseClient.from("pigs").select("id", { count: "exact", head: true }),
     supabaseClient.from("pigs").select("id", { count: "exact", head: true }).eq("status", "ท้อง"),
     supabaseClient.from("pens").select("id", { count: "exact", head: true }),
-    supabaseClient.from("pigs").select("pen_id").not("pen_id", "is", null),
+    supabaseClient
+      .from("pigs")
+      .select("pen_id")
+      .not("pen_id", "is", null)
+      .neq("status", "ขายแล้ว")
+      .neq("status", "ตาย"),
     supabaseClient.from("bills").select("id", { count: "exact", head: true }).eq("status", "รอตรวจสอบ"),
     supabaseClient.from("cash_advances").select("id", { count: "exact", head: true }).eq("status", "รออนุมัติ"),
   ]);

@@ -4,7 +4,7 @@
 // ข้อควรรู้: เกือบทุกตารางมี RLS policy แบบ auth.role() = 'authenticated'
 // ถ้ายังไม่มีการ login (Supabase Auth session) การ query จะได้แถวว่างเปล่าเสมอ ไม่ใช่ error
 // ดังนั้นหน้าจอที่จะสลับจาก mock data ไปใช้ query จริง ต้องมีระบบ login ก่อน (ดู ADR-013 ใน DECISIONS.md)
-// index.html (หน้า Overview) ยังใช้ mock data อยู่ตอนนี้ด้วยเหตุผลนี้
+// หน้าหลักและหน้าจัดการข้อมูลจะ query Supabase หลังตรวจสอบ session แล้ว
 
 const SUPABASE_URL = "https://hcwzfsxkfayhnbhuztbk.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_5R4aMGXBl1Z2OykOrUPUeQ_GJoSD8t2";
