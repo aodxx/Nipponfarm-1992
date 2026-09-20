@@ -9,10 +9,11 @@
 const SUPABASE_URL = "https://hcwzfsxkfayhnbhuztbk.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_5R4aMGXBl1Z2OykOrUPUeQ_GJoSD8t2";
 
-const supabaseClient = (SUPABASE_URL && SUPABASE_ANON_KEY)
+// สร้าง client ที่จุดเดียว และไม่ปล่อยให้ CDN/config ที่ผิดทำให้ทั้งหน้าเว็บหยุดทำงาน
+const supabaseClient = (window.supabase && SUPABASE_URL && SUPABASE_ANON_KEY)
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
   : null;
 
 if (!supabaseClient) {
-  console.warn("[Nipponfarm] ยังไม่ได้ตั้งค่า Supabase — กำลังใช้ mock data อยู่");
+  console.error("[Nipponfarm] ไม่สามารถเริ่มต้น Supabase client ได้");
 }
