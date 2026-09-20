@@ -31,17 +31,17 @@ Nipponfarm-1992/
 │   ├── supabase-client.js     จุดเดียวที่สร้าง Supabase client
 │   ├── auth.js                 ตรรกะหน้า login (pages/login.html)
 │   ├── auth-guard.js           requireAuth()/attachLogout() ใช้กับทุกหน้าที่ต้อง login
+│   ├── ui-helpers.js           el()/clearChildren()/getDueMeta()/showLoading() ฯลฯ ใช้ร่วมทุกหน้า
 │   ├── app.js                 ตรรกะหน้า Overview
-│   ├── mock-data.js           mock data (อ้างอิง/ไม่ได้ใช้จริงแล้วตั้งแต่เชื่อม Supabase — ดู CHANGELOG.md)
-│   ├── pigs.js                ตรรกะหน้าแม่พันธุ์ (เฟส 2)
-│   ├── calendar.js            ตรรกะหน้าปฏิทิน (เฟส 2)
+│   ├── pigs.js                ตรรกะหน้าแม่พันธุ์ (เฟส 2 — สร้างแล้ว)
+│   ├── calendar.js            ตรรกะหน้าปฏิทิน (เฟส 2 — สร้างแล้ว)
 │   ├── pens.js                ตรรกะผังคอก (เฟส 3)
 │   ├── finance.js             ตรรกะบิล/ขายหมู (เฟส 4)
 │   └── staff.js                ตรรกะพนักงาน/เงินเดือน (เฟส 5)
 ├── pages/
 │   ├── login.html              เข้าสู่ระบบ (สร้างแล้ว)
-│   ├── pigs.html
-│   ├── calendar.html
+│   ├── pigs.html                แม่พันธุ์ (เฟส 2 — สร้างแล้ว)
+│   ├── calendar.html            ปฏิทิน (เฟส 2 — สร้างแล้ว)
 │   ├── pens.html
 │   ├── finance.html
 │   └── staff.html
@@ -60,7 +60,7 @@ Nipponfarm-1992/
 
 1. มีฟังก์ชัน `get<ชื่อหน้า>Data()` ฟังก์ชันเดียวเป็นจุดเข้าออกข้อมูลของหน้านั้น
 2. ฟังก์ชัน render แยกจากฟังก์ชันดึงข้อมูลเสมอ — สลับจาก mock data ไป Supabase จริง โดยไม่ต้องแก้โค้ด render
-3. ระหว่างเฟสที่ยังไม่เชื่อม Supabase จริง ให้ใช้ mock data ที่มีรูปร่าง (shape) ตรงกับตารางใน `DATABASE.md` ทุกประการ เพื่อสลับได้ทันทีภายหลัง วันที่ในข้อมูลตัวอย่างต้องคำนวณ dynamic เทียบกับวันนี้จริงเสมอ ห้าม hardcode ป้ายวันที่/สถานะ (ดู `js/mock-data.js` เป็นตัวอย่างรูปแบบ แม้ Overview จะเลิกใช้ไฟล์นี้แล้วหลังเชื่อม Supabase จริง)
+3. ระหว่างเฟสที่ยังไม่เชื่อม Supabase จริง (ถ้ามีในอนาคต) ให้ใช้ mock data ที่มีรูปร่าง (shape) ตรงกับตารางใน `DATABASE.md` ทุกประการ เพื่อสลับได้ทันทีภายหลัง วันที่ในข้อมูลตัวอย่างต้องคำนวณ dynamic เทียบกับวันนี้จริงเสมอ ห้าม hardcode ป้ายวันที่/สถานะ — ตั้งแต่เฟส 1 เป็นต้นไปทุกหน้าต่อ Supabase จริงตั้งแต่แรก ไม่มี mock data ค้างในโค้ดแล้ว
 4. ทุกหน้าที่ต้อง login เรียก `requireAuth()` จาก `js/auth-guard.js` เป็นบรรทัดแรกใน init ก่อน render อะไรทั้งสิ้น (ดูตัวอย่างใน `js/app.js`) และผูกปุ่ม logout ด้วย `attachLogout("logout-button")`
 5. ทุกหน้าต้องมี 3 สถานะ: กำลังโหลด, ผิดพลาด (พร้อมปุ่มลองใหม่), และเนื้อหาจริง — ห้ามปล่อยให้หน้าว่างเปล่าเงียบๆ เมื่อ query ล้มเหลว (ดู `#main-loading`/`#main-error`/`#main-content` ใน `index.html` เป็นแบบอย่าง)
 6. ห้ามใช้ `innerHTML` กับข้อมูลจากฐานข้อมูล/ผู้ใช้ — สร้าง DOM node ด้วย `document.createElement` + `textContent` เท่านั้น (ป้องกัน DOM XSS)

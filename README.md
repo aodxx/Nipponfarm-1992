@@ -19,7 +19,8 @@
 
 ## สถานะปัจจุบัน
 
-**เฟส 1 (โครงข้อมูล + Overview):** ใช้งานได้จริงแล้ว — เชื่อม Supabase project "nipponfarm" (RLS + login) หน้า Overview ดึงข้อมูลจริง ต้อง login ก่อนถึงจะเข้าได้ (`pages/login.html`)
+**เฟส 1 (โครงข้อมูล + Overview):** ใช้งานได้จริงแล้ว
+**เฟส 2 (แม่พันธุ์/ปฏิทิน):** ใช้งานได้จริงแล้ว — เพิ่มคอก/แม่พันธุ์/ประวัติได้ที่ `pages/pigs.html`, ดู/เพิ่ม/ทำเครื่องหมายงานเสร็จได้ที่ `pages/calendar.html`
 รายละเอียดล่าสุด → `CHANGELOG.md`, แผนเฟสถัดไป → GitHub Issues ของ repo นี้
 
 ## โครงสร้างไฟล์
@@ -31,12 +32,14 @@ Nipponfarm-1992/
 ├── css/
 │   └── style.css            ธีมและ layout ทั้งหมด — ทุกหน้าใช้ไฟล์นี้ไฟล์เดียว
 ├── js/
-│   ├── mock-data.js          ข้อมูลตัวอย่าง (อ้างอิงรูปแบบเท่านั้น — Overview เลิกใช้แล้วหลังเชื่อม Supabase จริง)
-│   ├── app.js                ตรรกะดึงข้อมูลจริงและ render หน้า Overview
+│   ├── app.js                ตรรกะหน้า Overview (ดึงข้อมูลจริง)
+│   ├── pigs.js                ตรรกะหน้าแม่พันธุ์ (เฟส 2)
+│   ├── calendar.js            ตรรกะหน้าปฏิทิน (เฟส 2)
+│   ├── ui-helpers.js          ฟังก์ชันร่วมทุกหน้า (el, clearChildren, getDueMeta, loading/error state)
 │   ├── auth.js                ตรรกะหน้า login (pages/login.html)
 │   ├── auth-guard.js          requireAuth()/attachLogout() ใช้กับทุกหน้าที่ต้อง login
 │   └── supabase-client.js    จุดเดียวที่เชื่อมต่อ Supabase (เชื่อมจริงแล้ว)
-├── pages/                    login.html (สร้างแล้ว) + หน้าจอเฟสถัดไป (แม่พันธุ์, ปฏิทิน, ผังคอก, การเงิน, พนักงาน)
+├── pages/                    login.html, pigs.html, calendar.html (สร้างแล้ว) + หน้าจอเฟสถัดไป (ผังคอก, การเงิน, พนักงาน)
 ├── supabase/
 │   ├── migrations/           DDL จริง แยกไฟล์ตามลำดับ (schema → RLS → triggers)
 │   └── seed.sql              ข้อมูลตั้งต้นที่ต้องมีก่อนใช้งานจริง (เช่น task_types)

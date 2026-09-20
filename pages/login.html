@@ -11,14 +11,7 @@
 <link rel="stylesheet" href="../css/style.css">
 <style>
   body { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .login-card {
-    width: 100%;
-    max-width: 360px;
-    padding: 32px 28px;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-  }
+  .login-card { width: 100%; max-width: 360px; }
   .login-card h1 {
     font-family: var(--font-display);
     font-weight: 500;
@@ -32,57 +25,18 @@
     font-size: 14px;
     margin: 0 0 24px;
   }
-  .field { margin-bottom: 16px; }
-  .field label {
-    display: block;
-    font-size: 13.5px;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-  .field input {
-    width: 100%;
-    font-family: var(--font-body);
-    font-size: 15px;
-    padding: 10px 12px;
-    border: 1.5px solid var(--rule);
-    border-radius: 4px;
-    background: var(--limewash);
-    color: var(--ink);
-    box-sizing: border-box;
-  }
-  .field input:focus-visible {
-    outline: 2px solid var(--pasture);
-    outline-offset: 1px;
-  }
-  .login-button {
-    width: 100%;
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 15px;
-    padding: 11px;
-    background: var(--ink);
-    color: var(--paper);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .login-button:disabled { opacity: 0.6; cursor: default; }
-  .login-error {
-    color: var(--rust);
-    font-size: 13.5px;
-    margin: 0 0 16px;
-    text-align: center;
-  }
+  .login-card .button-primary { width: 100%; padding: 11px; }
+  .login-card .error-text { text-align: center; }
 </style>
 </head>
 <body>
 
-  <form class="login-card" id="login-form" novalidate>
+  <form class="card login-card" id="login-form" novalidate>
     <span class="tag-mark" style="display:block; width: fit-content; margin: 0 auto 12px;">NF</span>
     <h1>Nipponfarm</h1>
     <p class="sub">เข้าสู่ระบบเพื่อจัดการฟาร์ม</p>
 
-    <p class="login-error" id="login-error" hidden></p>
+    <p class="error-text" id="login-error" hidden></p>
 
     <div class="field">
       <label for="email">อีเมล</label>
@@ -94,7 +48,7 @@
       <input type="password" id="password" name="password" autocomplete="current-password" required>
     </div>
 
-    <button type="submit" class="login-button" id="login-button">เข้าสู่ระบบ</button>
+    <button type="submit" class="button-primary" id="login-button">เข้าสู่ระบบ</button>
   </form>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

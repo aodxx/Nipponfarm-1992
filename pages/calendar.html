@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ปฏิทินงาน — Nipponfarm</title>
+<meta name="theme-color" content="#EDE7DB">
+<link rel="manifest" href="../manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="tag-mark">NF</span>
+      <h1>Nipponfarm</h1>
+    </div>
+    <div class="topbar-meta">
+      <button type="button" id="logout-button" class="logout-link">ออกจากระบบ</button>
+    </div>
+  </header>
+
+  <nav class="page-nav">
+    <a href="../index.html">ภาพรวม</a>
+    <a href="pigs.html">แม่พันธุ์</a>
+    <a href="calendar.html" class="active">ปฏิทิน</a>
+  </nav>
+
+  <main>
+
+    <div id="main-loading" class="state-block" role="status">
+      <p>กำลังโหลดข้อมูล…</p>
+    </div>
+
+    <div id="main-error" class="state-block" role="alert" hidden>
+      <p id="main-error-message">โหลดข้อมูลไม่สำเร็จ</p>
+      <button type="button" id="retry-button" class="retry-button">ลองใหม่อีกครั้ง</button>
+    </div>
+
+    <div id="main-content" hidden>
+
+      <!-- Section: เพิ่มงานใหม่ -->
+      <section class="ledger-block">
+        <h2>เพิ่มงานใหม่</h2>
+        <form id="task-form" class="card">
+          <p class="error-text" id="task-form-error" hidden></p>
+          <div class="field-row">
+            <div class="field">
+              <label for="task-title">ชื่องาน *</label>
+              <input type="text" id="task-title" required>
+            </div>
+            <div class="field">
+              <label for="task-due-date">วันครบกำหนด *</label>
+              <input type="date" id="task-due-date" required>
+            </div>
+            <div class="field">
+              <label for="task-pig">หมูที่เกี่ยวข้อง (ถ้ามี)</label>
+              <select id="task-pig"><option value="">— งานทั่วไป —</option></select>
+            </div>
+          </div>
+          <button type="submit" class="button-primary" id="task-submit">เพิ่มงาน</button>
+        </form>
+      </section>
+
+      <!-- Section: ช่วงวันที่ -->
+      <section class="ledger-block">
+        <div class="block-head">
+          <h2 id="range-label">งานสัปดาห์นี้</h2>
+          <span class="count-pill" id="range-count">0 รายการ</span>
+        </div>
+        <div class="field-row" style="align-items: flex-end; margin-bottom: 16px;">
+          <button type="button" class="button-secondary" id="prev-range">‹ ก่อนหน้า</button>
+          <button type="button" class="button-secondary" id="today-range">วันนี้</button>
+          <button type="button" class="button-secondary" id="next-range">ถัดไป ›</button>
+        </div>
+
+        <ul class="log-list" id="agenda-list"></ul>
+        <p class="empty-note" id="agenda-empty" hidden>ไม่มีงานในช่วงนี้</p>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/ui-helpers.js"></script>
+  <script src="../js/calendar.js"></script>
+</body>
+</html>

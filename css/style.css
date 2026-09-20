@@ -86,6 +86,185 @@ body {
 }
 .logout-link:hover { color: var(--ink); }
 
+/* ---------- Page nav (Overview / Pigs / Calendar) ---------- */
+.page-nav {
+  display: flex;
+  gap: 4px;
+  padding: 10px clamp(16px, 4vw, 40px) 0;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.page-nav a {
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+.page-nav a:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+.page-nav a.active {
+  color: var(--ink);
+  font-weight: 600;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+}
+
+/* ---------- Shared card (login, forms) ---------- */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 24px;
+}
+
+/* ---------- Shared form fields ---------- */
+.field { margin-bottom: 16px; }
+.field label {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--rule);
+  border-radius: 4px;
+  background: var(--limewash);
+  color: var(--ink);
+  box-sizing: border-box;
+}
+.field textarea { resize: vertical; min-height: 64px; }
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--pasture);
+  outline-offset: 1px;
+}
+.field-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.field-row .field { flex: 1; min-width: 140px; }
+
+/* ---------- Shared buttons ---------- */
+.button-primary {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 10px 20px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.button-primary:disabled { opacity: 0.6; cursor: default; }
+.button-primary:hover:not(:disabled) { opacity: 0.9; }
+
+.button-secondary {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.button-secondary:hover { background: var(--limewash); }
+
+.error-text {
+  color: var(--rust);
+  font-size: 13.5px;
+  margin: 0 0 16px;
+}
+
+.success-text {
+  color: var(--pasture);
+  font-size: 13.5px;
+  margin: 0 0 16px;
+}
+
+/* ---------- Data table (pig list, etc.) ---------- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14.5px;
+}
+.data-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-size: 13px;
+  padding: 8px 10px;
+  border-bottom: 1.5px solid var(--rule);
+}
+.data-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+.data-table tbody tr {
+  cursor: pointer;
+}
+.data-table tbody tr:hover {
+  background: var(--limewash);
+}
+.data-table tbody tr.selected {
+  background: var(--pasture-tint);
+}
+
+/* ---------- Status badge (pig status, task status) ---------- */
+.badge {
+  display: inline-block;
+  font-size: 12.5px;
+  padding: 3px 9px;
+  border-radius: 3px;
+  background: var(--limewash);
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+}
+
+/* ---------- Timeline (pig events) ---------- */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.timeline-row {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--rule);
+}
+.timeline-row:first-child { border-top: none; }
+.timeline-date {
+  flex-shrink: 0;
+  width: 90px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.timeline-body { flex: 1; }
+.timeline-type {
+  font-weight: 500;
+  margin: 0 0 2px;
+}
+.timeline-notes {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
 /* ---------- Layout ---------- */
 main {
   max-width: 760px;
@@ -162,6 +341,16 @@ main {
   border-top: 1px solid var(--rule);
 }
 .log-row:first-child { border-top: none; }
+
+.agenda-date-heading {
+  list-style: none;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  padding: 16px 0 6px;
+}
+.agenda-date-heading:first-child { padding-top: 0; }
 
 .status-bar {
   align-self: stretch;

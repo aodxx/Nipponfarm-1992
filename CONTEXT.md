@@ -8,9 +8,10 @@ Nipponfarm — ระบบจัดการฟาร์มหมูครบ�
 
 ## สถานะปัจจุบัน (อัปเดตล่าสุด: ดู CHANGELOG.md)
 
-- **เฟส 1 (โครงข้อมูล + Overview):** ใช้งานได้จริงแล้ว — มีหน้า login (`pages/login.html`), Overview ดึงข้อมูลจริงจาก Supabase (ไม่ใช้ mock data แล้ว) ต้อง login ก่อนถึงจะเข้าหน้า Overview ได้
-- **Supabase:** โปรเจกต์ "nipponfarm" สร้างแล้วและรัน migrations ครบ (`0001`, `0002` RLS, `0003` trigger) + seed แล้ว ทดสอบ RLS ผ่านครบ 3 มุมมอง (anonymous/staff/admin) — URL/anon key ใส่ใน `js/supabase-client.js` แล้ว บัญชีผู้ใช้สร้างผ่าน Supabase Dashboard เท่านั้น (ไม่มีสมัครสมาชิกสาธารณะ) — ดู API.md ข้อ 4
-- **เฟส 2-5:** ยังไม่เริ่ม — ดูแผนใน `PRD.md`, มี GitHub Issues แยกตามเฟสแล้ว
+- **เฟส 1 (โครงข้อมูล + Overview):** ใช้งานได้จริงแล้ว — มีหน้า login (`pages/login.html`), Overview ดึงข้อมูลจริงจาก Supabase ต้อง login ก่อนถึงจะเข้าหน้า Overview ได้
+- **เฟส 2 (แม่พันธุ์/ปฏิทิน):** ใช้งานได้จริงแล้ว — `pages/pigs.html` (เพิ่มคอก, เพิ่มแม่พันธุ์, บันทึกประวัติ pig_events) และ `pages/calendar.html` (agenda 7 วัน, เพิ่มงาน, ทำเครื่องหมายเสร็จ) ทดสอบ trigger auto-gen task จาก pig_events แล้วทำงานถูกต้อง
+- **เฟส 3-5:** ยังไม่เริ่ม — ดูแผนใน `PRD.md`, มี GitHub Issues แยกตามเฟสแล้ว
+- **Supabase:** โปรเจกต์ "nipponfarm" — migrations + RLS ครบแล้ว, บัญชีผู้ใช้สร้างผ่าน Supabase Dashboard เท่านั้น (ไม่มีสมัครสมาชิกสาธารณะ) — ดู API.md ข้อ 4
 
 ## ต้องอ่านอะไรก่อนแก้โค้ด
 

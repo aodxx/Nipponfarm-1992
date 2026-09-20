@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>แม่พันธุ์ — Nipponfarm</title>
+<meta name="theme-color" content="#EDE7DB">
+<link rel="manifest" href="../manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Taviraj:wght@400;500;600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <span class="tag-mark">NF</span>
+      <h1>Nipponfarm</h1>
+    </div>
+    <div class="topbar-meta">
+      <button type="button" id="logout-button" class="logout-link">ออกจากระบบ</button>
+    </div>
+  </header>
+
+  <nav class="page-nav">
+    <a href="../index.html">ภาพรวม</a>
+    <a href="pigs.html" class="active">แม่พันธุ์</a>
+    <a href="calendar.html">ปฏิทิน</a>
+  </nav>
+
+  <main>
+
+    <div id="main-loading" class="state-block" role="status">
+      <p>กำลังโหลดข้อมูล…</p>
+    </div>
+
+    <div id="main-error" class="state-block" role="alert" hidden>
+      <p id="main-error-message">โหลดข้อมูลไม่สำเร็จ</p>
+      <button type="button" id="retry-button" class="retry-button">ลองใหม่อีกครั้ง</button>
+    </div>
+
+    <div id="main-content" hidden>
+
+      <!-- Section: คอก -->
+      <section class="ledger-block">
+        <h2>คอก</h2>
+        <ul class="log-list" id="pen-list"></ul>
+        <p class="empty-note" id="pen-empty" hidden>ยังไม่มีคอกในระบบ — เพิ่มคอกแรกด้านล่าง</p>
+
+        <form id="pen-form" class="card" style="margin-top: 16px;">
+          <p class="error-text" id="pen-form-error" hidden></p>
+          <div class="field-row">
+            <div class="field">
+              <label for="pen-code">รหัสคอก *</label>
+              <input type="text" id="pen-code" placeholder="เช่น A-1" required>
+            </div>
+            <div class="field">
+              <label for="pen-building">โรงเรือน</label>
+              <input type="text" id="pen-building" placeholder="เช่น โรงเรือน A">
+            </div>
+            <div class="field">
+              <label for="pen-capacity">ความจุ (ตัว)</label>
+              <input type="number" id="pen-capacity" min="0">
+            </div>
+          </div>
+          <button type="submit" class="button-secondary" id="pen-submit">เพิ่มคอก</button>
+        </form>
+      </section>
+
+      <!-- Section: เพิ่มแม่พันธุ์ใหม่ -->
+      <section class="ledger-block">
+        <h2>เพิ่มแม่พันธุ์ใหม่</h2>
+        <form id="pig-form" class="card">
+          <p class="error-text" id="pig-form-error" hidden></p>
+          <div class="field-row">
+            <div class="field">
+              <label for="pig-ear-tag">เบอร์หู *</label>
+              <input type="text" id="pig-ear-tag" required>
+            </div>
+            <div class="field">
+              <label for="pig-breed">สายพันธุ์</label>
+              <input type="text" id="pig-breed">
+            </div>
+            <div class="field">
+              <label for="pig-birth-date">วันเกิด</label>
+              <input type="date" id="pig-birth-date">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="pig-pen">คอก</label>
+              <select id="pig-pen"><option value="">— ไม่ระบุ —</option></select>
+            </div>
+            <div class="field">
+              <label for="pig-status">สถานะเริ่มต้น</label>
+              <select id="pig-status">
+                <option value="รอผสม">รอผสม</option>
+                <option value="ผสมแล้ว">ผสมแล้ว</option>
+                <option value="ท้อง">ท้อง</option>
+                <option value="เลี้ยงลูก">เลี้ยงลูก</option>
+                <option value="หย่านมแล้ว">หย่านมแล้ว</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="button-primary" id="pig-submit">เพิ่มแม่พันธุ์</button>
+        </form>
+      </section>
+
+      <!-- Section: รายชื่อหมู -->
+      <section class="ledger-block">
+        <div class="block-head">
+          <h2>รายชื่อแม่พันธุ์/หมู</h2>
+          <span class="count-pill" id="pig-count">0 ตัว</span>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>เบอร์หู</th>
+                <th>สายพันธุ์</th>
+                <th>สถานะ</th>
+                <th>คอก</th>
+              </tr>
+            </thead>
+            <tbody id="pig-table-body"></tbody>
+          </table>
+        </div>
+        <p class="empty-note" id="pig-empty" hidden>ยังไม่มีแม่พันธุ์ในระบบ — เพิ่มตัวแรกด้านบน</p>
+      </section>
+
+      <!-- Section: ประวัติของตัวที่เลือก -->
+      <section class="ledger-block" id="pig-detail-section" hidden>
+        <h2 id="pig-detail-title">ประวัติ</h2>
+
+        <ul class="timeline" id="pig-events-list"></ul>
+        <p class="empty-note" id="pig-events-empty" hidden>ยังไม่มีประวัติของตัวนี้</p>
+
+        <form id="event-form" class="card" style="margin-top: 16px;">
+          <p class="error-text" id="event-form-error" hidden></p>
+          <div class="field-row">
+            <div class="field">
+              <label for="event-type">ประเภทเหตุการณ์</label>
+              <select id="event-type">
+                <option value="ผสมพันธุ์">ผสมพันธุ์</option>
+                <option value="ตรวจท้อง">ตรวจท้อง</option>
+                <option value="คลอด">คลอด</option>
+                <option value="หย่านม">หย่านม</option>
+                <option value="รักษา">รักษา</option>
+                <option value="อื่นๆ">อื่นๆ</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="event-date">วันที่</label>
+              <input type="date" id="event-date" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="event-notes">หมายเหตุ</label>
+            <textarea id="event-notes"></textarea>
+          </div>
+          <button type="submit" class="button-secondary" id="event-submit">บันทึกเหตุการณ์</button>
+        </form>
+      </section>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/ui-helpers.js"></script>
+  <script src="../js/pigs.js"></script>
+</body>
+</html>
