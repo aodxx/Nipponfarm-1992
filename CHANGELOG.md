@@ -29,3 +29,11 @@
 - ทดสอบ RLS จริงด้วยผู้ใช้ทดสอบชั่วคราว 3 มุมมอง: anonymous อ่านตารางที่ต้อง authenticated ไม่ได้เลย (0 แถว), staff เห็นเฉพาะ cash_advances ของตัวเอง, admin เห็นทั้งหมด, staff แก้ role ตัวเองเป็น admin ไม่ได้ — ลบข้อมูลทดสอบออกหมดแล้ว
 - ใส่ URL + publishable key จริงใน `js/supabase-client.js`
 - **พบข้อจำกัดใหม่:** ยังไม่มีหน้า login จึงยังสลับ Overview จาก mock data ไปใช้ query จริงไม่ได้ (RLS ต้องการ authenticated role) — บันทึกเป็น ADR-013 และเป็นงานที่ต้องทำก่อนเชื่อมหน้าจอไหนกับข้อมูลจริง
+
+## 2026-09-20 (ต่อ) — สร้างหน้า Login + สลับ Overview เป็นข้อมูลจริง
+
+- สร้าง `pages/login.html` + `js/auth.js` (Supabase Auth email/password, ไม่มีสมัครสมาชิกสาธารณะ) — ดู ADR-014
+- สร้าง `js/auth-guard.js` (`requireAuth()`, `attachLogout()`) ใช้ป้องกันทุกหน้าที่ต้อง login
+- `index.html` เพิ่มปุ่ม "ออกจากระบบ" ในแถบบน และเรียก `requireAuth()` ก่อน render ทุกครั้ง
+- เขียน `getOverviewData()` ใหม่ใน `js/app.js` ให้ query Supabase จริงทั้งหมด (tasks, pigs, pens, bills, cash_advances) แทน mock data — `js/mock-data.js` ยังเก็บไว้เป็นตัวอย่างรูปแบบข้อมูลสำหรับหน้าจอเฟสถัดไป แต่ไม่ได้ใช้ใน `index.html` แล้ว
+- ฐานข้อมูลยังไม่มีข้อมูลฟาร์มจริง (หมู/คอก/งาน) จึงเห็นเป็นสถานะว่างเปล่าทุกส่วนเมื่อ login ครั้งแรก — เป็นพฤติกรรมที่ถูกต้องตามข้อมูลจริงในระบบใหม่

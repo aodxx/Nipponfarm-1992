@@ -1,24 +1,101 @@
 // app.js
 // ตรรกะแสดงผลหน้า Overview
 //
-// จุดสำคัญ: ทุกการดึงข้อมูลผ่านฟังก์ชัน getOverviewData() จุดเดียว
-// ตอนนี้ฟังก์ชันนี้ return ค่าจาก MOCK_DATA
-// เมื่อเชื่อม Supabase แล้ว ให้แก้เฉพาะฟังก์ชันนี้ให้ query จริงแทน
+// จุดสำคัญ: ทุกการดึงข้อมูลผ่านฟังก์ชัน getOverviewData() จุดเดียว — ดึงจาก Supabase จริง
+// (เชื่อมต่อจริงแล้วตั้งแต่ 2026-09-20 — ดู CHANGELOG.md) ต้อง login ก่อนถึงจะเรียกสำเร็จ (RLS)
 // ส่วนโค้ด render ด้านล่างไม่ต้องแก้ ตราบใดที่รูปร่างข้อมูลเหมือนเดิม
 //
 // ความปลอดภัย: ห้ามใช้ innerHTML กับข้อมูลที่มาจากฐานข้อมูล/ผู้ใช้ในไฟล์นี้
 // ทุก node สร้างผ่าน document.createElement + textContent เท่านั้น (ดู AGENTS.md)
 
+function isoToday() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().slice(0, 10);
+}
+
+function isoOffset(days) {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function taskRowToViewModel(row) {
+  const pig = row.pigs;
+  const subtitle = pig
+    ? `เบอร์หู ${pig.ear_tag}${pig.pens ? " · คอก " + pig.pens.code : ""}`
+    : "งานทั่วไป";
+  return { id: row.id, title: row.title, subtitle, due_date: row.due_date };
+}
+
+function farrowRowToViewModel(row) {
+  return {
+    id: row.id,
+    title: `เบอร์หู ${row.ear_tag}`,
+    subtitle: row.pens ? `คอก ${row.pens.code}` : "ยังไม่ระบุคอก",
+    due_date: row.expected_farrow_date,
+  };
+}
+
 async function getOverviewData() {
-  // TODO: แทนที่ด้วย Supabase queries เช่น
-  //   const { data: todayTasks } = await supabaseClient
-  //     .from('tasks')
-  //     .select('*, pigs(ear_tag, pens(code))')
-  //     .lte('due_date', todayISO)
-  //     .order('due_date');
-  // ดูตัวอย่าง query เต็มและข้อควรระวังเรื่อง join ใน API.md
-  await new Promise(r => setTimeout(r, 0)); // จำลอง async ให้พฤติกรรมตรงกับของจริง
-  return MOCK_DATA;
+  const today = isoToday();
+  const sevenDaysAhead = isoOffset(7);
+
+  const [
+    tasksRes,
+    farrowRes,
+    totalPigsRes,
+    pregnantRes,
+    pensRes,
+    occupiedPensRes,
+    billsRes,
+    advancesRes,
+  ] = await Promise.all([
+    supabaseClient
+      .from("tasks")
+      .select("id, title, due_date, pigs(ear_tag, pens(code))")
+      .lte("due_date", today)
+      .order("due_date"),
+    supabaseClient
+      .from("pigs")
+      .select("id, ear_tag, expected_farrow_date, pens(code)")
+      .eq("status", "ท้อง")
+      .gte("expected_farrow_date", today)
+      .lte("expected_farrow_date", sevenDaysAhead)
+      .order("expected_farrow_date"),
+    supabaseClient.from("pigs").select("id", { count: "exact", head: true }),
+    supabaseClient.from("pigs").select("id", { count: "exact", head: true }).eq("status", "ท้อง"),
+    supabaseClient.from("pens").select("id", { count: "exact", head: true }),
+    supabaseClient.from("pigs").select("pen_id").not("pen_id", "is", null),
+    supabaseClient.from("bills").select("id", { count: "exact", head: true }).eq("status", "รอตรวจสอบ"),
+    supabaseClient.from("cash_advances").select("id", { count: "exact", head: true }).eq("status", "รออนุมัติ"),
+  ]);
+
+  for (const res of [tasksRes, farrowRes, totalPigsRes, pregnantRes, pensRes, occupiedPensRes, billsRes, advancesRes]) {
+    if (res.error) throw res.error;
+  }
+
+  const occupiedPenCount = new Set((occupiedPensRes.data || []).map(r => r.pen_id)).size;
+
+  const pendingApprovals = [];
+  if (billsRes.count > 0) {
+    pendingApprovals.push({ id: "bills", label: "บิลค่าใช้จ่ายรออนุมัติ", count: billsRes.count });
+  }
+  if (advancesRes.count > 0) {
+    pendingApprovals.push({ id: "advances", label: "คำขอเบิกเงินล่วงหน้า", count: advancesRes.count });
+  }
+
+  return {
+    farmStats: {
+      totalPigs: totalPigsRes.count || 0,
+      pregnant: pregnantRes.count || 0,
+      emptyPens: Math.max((pensRes.count || 0) - occupiedPenCount, 0),
+    },
+    todayTasks: (tasksRes.data || []).map(taskRowToViewModel),
+    nearFarrowing: (farrowRes.data || []).map(farrowRowToViewModel),
+    pendingApprovals,
+  };
 }
 
 // ---------- คำนวณสถานะ/ป้ายกำกับจากวันที่จริง (ไม่ hardcode) ----------
@@ -213,7 +290,11 @@ async function loadAndRender() {
 }
 
 function init() {
-  loadAndRender();
+  requireAuth().then(session => {
+    if (!session) return; // requireAuth already redirected to login
+    loadAndRender();
+  });
+  attachLogout("logout-button");
   document.getElementById("retry-button").addEventListener("click", loadAndRender);
 }
 

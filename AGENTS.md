@@ -11,7 +11,8 @@
 - **ภาษา:** UI/ข้อความ/comment อธิบายเป็นภาษาไทย, ชื่อตัวแปร/ฟังก์ชัน/ตาราง/คอลัมน์เป็นภาษาอังกฤษ snake_case (DB) หรือ camelCase (JS)
 - **ไม่มี build step:** เขียน HTML/CSS/JS ธรรมดา ไม่เพิ่ม bundler, framework, หรือ npm dependency ใหม่โดยไม่จำเป็น (ดู ADR-007 ใน `DECISIONS.md`)
 - **ธีม:** ใช้ CSS variables ที่กำหนดไว้ใน `css/style.css` (สี/ฟอนต์) เท่านั้น ห้าม hardcode สีใหม่ในไฟล์อื่น ถ้าต้องการสีเพิ่ม ให้เพิ่มเป็น variable ใน `:root` ของ `style.css`
-- **Data layer pattern:** ทุกหน้าจอมีฟังก์ชัน `get<ชื่อหน้า>Data()` เป็นจุดเดียวที่ดึงข้อมูล (ตอนนี้จาก mock, ภายหลังจาก Supabase) แยกจากฟังก์ชัน render เสมอ — ดูตัวอย่างใน `js/app.js`
+- **Data layer pattern:** ทุกหน้าจอมีฟังก์ชัน `get<ชื่อหน้า>Data()` เป็นจุดเดียวที่ดึงข้อมูลจาก Supabase จริง แยกจากฟังก์ชัน render เสมอ — ดูตัวอย่างใน `js/app.js`
+- **Auth guard:** ทุกหน้าที่ต้อง login เรียก `requireAuth()` จาก `js/auth-guard.js` เป็นบรรทัดแรกใน init เสมอ ก่อน render อะไรทั้งสิ้น
 - **Supabase client:** สร้างที่ `js/supabase-client.js` ที่เดียว ห้ามสร้างซ้ำในไฟล์อื่น
 - **Mock data:** ต้องมีรูปร่าง (field names) ตรงกับตารางจริงใน `DATABASE.md` เป๊ะ เพื่อสลับไป Supabase จริงได้โดยไม่ต้องแก้โค้อ render
 

@@ -53,5 +53,8 @@ Bucket ที่วางแผนไว้ (สร้างตอนเชื�
 
 ## 4. Auth
 
-- Login ผ่าน Supabase Auth (email/password หรือ magic link — เลือกตอนเชื่อมจริง)
-- หลัง login แล้วอ่าน role จากตาราง `staff` เพื่อกำหนดเมนู/สิทธิ์ที่เห็นในหน้าเว็บ (UI-level) — สิทธิ์จริงยังคงบังคับที่ RLS เสมอ ห้ามพึ่ง UI-level อย่างเดียว
+- Login ผ่าน Supabase Auth email/password — สร้างแล้วที่ `pages/login.html` + `js/auth.js`
+- ทุกหน้าที่ต้อง login include `js/auth-guard.js` แล้วเรียก `requireAuth()` ก่อน render เนื้อหา (redirect ไป login อัตโนมัติถ้ายังไม่ login) — ดูตัวอย่างใน `js/app.js`
+- ปุ่ม logout ผูกด้วย `attachLogout("logout-button")` จาก `js/auth-guard.js`
+- บัญชีผู้ใช้ (staff/admin) ต้องสร้างโดยแอดมินเท่านั้น — **ไม่มีหน้าสมัครสมาชิกสาธารณะ** เพราะเป็นระบบภายในฟาร์ม สร้างบัญชีผ่าน Supabase Dashboard (Authentication → Add user) แล้ว insert แถวคู่กันในตาราง `staff` พร้อมกำหนด `role`
+- role อ่านจากตาราง `staff` เพื่อกำหนดเมนู/สิทธิ์ที่เห็นในหน้าเว็บ (UI-level) — สิทธิ์จริงยังคงบังคับที่ RLS เสมอ ห้ามพึ่ง UI-level อย่างเดียว
