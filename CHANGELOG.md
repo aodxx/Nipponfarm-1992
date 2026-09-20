@@ -21,3 +21,11 @@
 - **แก้ mock data ขัดกันเอง (P1):** เปลี่ยนทุกวันที่ใน `js/mock-data.js` เป็น ISO date คำนวณ dynamic จาก "วันนี้" จริง, ป้ายกำกับ/สีสถานะคำนวณใน `js/app.js` (ฟังก์ชัน `getDueMeta`) แทน hardcode string, ตัวเลข "ใกล้คลอด" ในการ์ดสรุปคำนวณจาก `nearFarrowing.length` แทนเลขแยกที่อาจขัดกัน
 - **แก้ PWA icon 404 (P1):** สร้างไอคอนจริง `icons/icon-192.png`, `icons/icon-512.png` — ยังไม่ทำ service worker/offline (ระบุ limitation ชัดเจนใน README) — ดู ADR-011
 - **แก้ accessibility (P1):** ทุกแถวสถานะมีข้อความไทยบอกระดับความเร่งด่วนเสมอ ("ปกติ · อีก N วัน" ฯลฯ) ไม่พึ่งสีอย่างเดียว พร้อม `aria-label` สรุปสถานะสำหรับ screen reader — ดู ADR-010
+
+## 2026-09-20 (ต่อ) — เชื่อม Supabase จริง
+
+- สร้าง Supabase project "nipponfarm" (region ap-southeast-1, free tier)
+- รัน `0001_initial_schema.sql`, `0002_enable_rls.sql`, `0003_triggers.sql`, `seed.sql` สำเร็จทั้งหมด
+- ทดสอบ RLS จริงด้วยผู้ใช้ทดสอบชั่วคราว 3 มุมมอง: anonymous อ่านตารางที่ต้อง authenticated ไม่ได้เลย (0 แถว), staff เห็นเฉพาะ cash_advances ของตัวเอง, admin เห็นทั้งหมด, staff แก้ role ตัวเองเป็น admin ไม่ได้ — ลบข้อมูลทดสอบออกหมดแล้ว
+- ใส่ URL + publishable key จริงใน `js/supabase-client.js`
+- **พบข้อจำกัดใหม่:** ยังไม่มีหน้า login จึงยังสลับ Overview จาก mock data ไปใช้ query จริงไม่ได้ (RLS ต้องการ authenticated role) — บันทึกเป็น ADR-013 และเป็นงานที่ต้องทำก่อนเชื่อมหน้าจอไหนกับข้อมูลจริง

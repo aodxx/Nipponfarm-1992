@@ -1,16 +1,13 @@
 // js/supabase-client.js
-// STUB — ยังไม่ได้เชื่อมต่อจริง
+// เชื่อมต่อ Supabase project "nipponfarm" จริงแล้ว (RLS ทดสอบผ่านครบ 3 มุมมองแล้ว — ดู CHANGELOG.md)
 //
-// เมื่อพร้อมเชื่อม Supabase:
-// 1. ใส่ script tag ใน index.html (ก่อน app.js):
-//      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-//      <script src="js/supabase-client.js"></script>
-// 2. ใส่ค่า URL และ anon key ของโปรเจกต์ Supabase ด้านล่าง
-//    (anon key ใช้ฝั่ง client ได้ปลอดภัย ถ้าตั้งค่า Row Level Security ไว้ถูกต้อง)
-// 3. แก้ getOverviewData() ใน js/app.js ให้เรียก supabaseClient แทนการอ่าน MOCK_DATA
+// ข้อควรรู้: เกือบทุกตารางมี RLS policy แบบ auth.role() = 'authenticated'
+// ถ้ายังไม่มีการ login (Supabase Auth session) การ query จะได้แถวว่างเปล่าเสมอ ไม่ใช่ error
+// ดังนั้นหน้าจอที่จะสลับจาก mock data ไปใช้ query จริง ต้องมีระบบ login ก่อน (ดู ADR-013 ใน DECISIONS.md)
+// index.html (หน้า Overview) ยังใช้ mock data อยู่ตอนนี้ด้วยเหตุผลนี้
 
-const SUPABASE_URL = "";       // TODO: ใส่ URL โปรเจกต์
-const SUPABASE_ANON_KEY = "";  // TODO: ใส่ anon/public key
+const SUPABASE_URL = "https://hcwzfsxkfayhnbhuztbk.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_5R4aMGXBl1Z2OykOrUPUeQ_GJoSD8t2";
 
 const supabaseClient = (SUPABASE_URL && SUPABASE_ANON_KEY)
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)

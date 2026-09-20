@@ -9,7 +9,7 @@ Nipponfarm — ระบบจัดการฟาร์มหมูครบ�
 ## สถานะปัจจุบัน (อัปเดตล่าสุด: ดู CHANGELOG.md)
 
 - **เฟส 1 (โครงข้อมูล + Overview):** สร้างหน้าจอแล้ว ใช้ mock data (`js/mock-data.js`) ยังไม่ได้เชื่อม Supabase จริง
-- **Supabase:** ยังไม่ได้สร้างโปรเจกต์ — migration ครบแล้ว (`supabase/migrations/0001` โครงตาราง, `0002` เปิด RLS + policy จริง, `0003` trigger auto-gen tasks) พร้อม `supabase/seed.sql` รอรันจริงตามลำดับ ห้ามให้ client ต่อ Supabase ก่อนรัน `0002` ครบ
+- **Supabase:** โปรเจกต์ "nipponfarm" สร้างแล้วและรัน migrations ครบ (`0001`, `0002` RLS, `0003` trigger) + seed แล้ว ทดสอบ RLS ผ่านครบ 3 มุมมอง (anonymous/staff/admin) — URL/anon key ใส่ใน `js/supabase-client.js` แล้ว **แต่หน้า Overview ยังใช้ mock data อยู่** เพราะยังไม่มีหน้า login (ดู ADR-013) ต้องทำก่อนสลับหน้าจอไหนไปใช้ข้อมูลจริง
 - **เฟส 2-5:** ยังไม่เริ่ม — ดูแผนใน `PRD.md`, มี GitHub Issues แยกตามเฟสแล้ว
 
 ## ต้องอ่านอะไรก่อนแก้โค้ด
