@@ -11,7 +11,7 @@
 | [`CONTEXT.md`](./CONTEXT.md) | สถานะปัจจุบัน + ต้องอ่านอะไรก่อนแก้อะไร (เริ่มที่นี่) |
 | [`PRD.md`](./PRD.md) | ขอบเขตฟีเจอร์ทั้ง 5 เฟส |
 | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | โครงสร้างระบบ, โฟลเดอร์, data layer pattern |
-| [`DATABASE.md`](./DATABASE.md) | ตารางฐานข้อมูลทุกเฟส (DDL เต็มที่ `docs/schema.sql`) |
+| [`DATABASE.md`](./DATABASE.md) | ตารางฐานข้อมูลทุกเฟส (DDL จริงอยู่ที่ `supabase/migrations/`) |
 | [`API.md`](./API.md) | วิธีหน้าเว็บคุยกับ Supabase + Edge Functions |
 | [`DECISIONS.md`](./DECISIONS.md) | เหตุผลของการตัดสินใจสำคัญ (ADR log) |
 | [`AGENTS.md`](./AGENTS.md) | ข้อตกลงการเขียนโค้ดสำหรับคน/AI agent ที่มาต่องาน |
@@ -35,11 +35,14 @@ Nipponfarm-1992/
 │   ├── app.js                ตรรกะดึงข้อมูลและ render หน้า Overview
 │   └── supabase-client.js    จุดเดียวที่เชื่อมต่อ Supabase (ยังไม่ได้ใส่ค่าจริง)
 ├── pages/                    หน้าจอของเฟสถัดไป (แม่พันธุ์, ปฏิทิน, ผังคอก, การเงิน, พนักงาน)
-├── docs/
-│   └── schema.sql            DDL เต็มทุกเฟส
-├── icons/                    ไอคอนสำหรับ PWA (ยังว่าง)
+├── supabase/
+│   ├── migrations/           DDL จริง แยกไฟล์ตามลำดับ (schema → RLS → triggers)
+│   └── seed.sql              ข้อมูลตั้งต้นที่ต้องมีก่อนใช้งานจริง (เช่น task_types)
+├── icons/                    ไอคอนสำหรับ PWA (icon-192.png, icon-512.png)
 └── assets/                   รูปภาพ/ไฟล์สื่ออื่นๆ (ยังว่าง)
 ```
+
+**ข้อจำกัดที่ควรรู้:** ตอนนี้มี manifest + ไอคอนสำหรับติดตั้งเป็น PWA ได้ แต่ **ยังไม่มี service worker** จึงยังใช้งานแบบ offline ไม่ได้ — ยังต้องต่ออินเทอร์เน็ตเสมอ (ดู CONTEXT.md/DECISIONS.md ADR-011)
 
 ## แนวทางออกแบบ (สรุปสั้น — เต็มดูที่ ADR-003 ใน DECISIONS.md)
 

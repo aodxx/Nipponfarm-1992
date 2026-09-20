@@ -9,10 +9,12 @@
 ```js
 const { data, error } = await supabaseClient
   .from('tasks')
-  .select('*, pigs(ear_tag), pens(code)')
+  .select('*, pigs(ear_tag, pens(code))')
   .eq('due_date', today)
   .order('due_date');
 ```
+
+**ข้อควรระวัง:** `tasks` มี foreign key ไปที่ `pigs` เท่านั้น ไม่มี `pen_id` ตรงๆ ถ้าต้องการคอกของงานนั้น ต้อง join ผ่าน `pigs(pens(code))` เสมอ (ไม่ใช่ `pens(code)` ตรงบน `tasks`) — query ทุกตัวในเอกสารนี้ต้องทดสอบกับ schema จริงก่อนใช้ในโค้ด ไม่ใช่คัดลอกไปใช้ตรงๆ โดยไม่ตรวจสอบ
 
 สิทธิ์การอ่าน/เขียนถูกบังคับด้วย RLS policy ที่ระดับฐานข้อมูล (ดู `DATABASE.md`) — โค้ดฝั่งหน้าเว็บไม่ต้องเช็ค role เอง แค่ query ตามปกติ Supabase จะกรองแถวที่สิทธิ์ไม่ถึงออกให้อัตโนมัติ
 
@@ -37,7 +39,7 @@ const { data, error } = await supabaseClient
 - **สถานะ:** ยังไม่ได้สร้าง — วางแผนไว้สำหรับเฟส 4
 
 ### auto-gen tasks (เฟส 1-2)
-- ทำเป็น **Database Trigger** (ไม่ใช่ Edge Function) เพราะเป็น logic ระดับข้อมูลล้วนๆ ไม่ต้องเรียก service ภายนอก — ดูแนวคิดใน `docs/schema.sql`
+- ทำเป็น **Database Trigger** (ไม่ใช่ Edge Function) เพราะเป็น logic ระดับข้อมูลล้วนๆ ไม่ต้องเรียก service ภายนอก — ดูโค้ดจริงใน `supabase/migrations/0003_triggers.sql`
 
 ## 3. Storage
 

@@ -27,43 +27,59 @@
 
   <main>
 
-    <!-- Section: ภาพรวมฟาร์มวันนี้ -->
-    <section class="ledger-block">
-      <h2>ภาพรวมฟาร์มวันนี้</h2>
-      <div class="stat-strip" id="stat-strip">
-        <!-- filled by JS -->
-      </div>
-    </section>
+    <!-- สถานะกำลังโหลด -->
+    <div id="main-loading" class="state-block" role="status">
+      <p>กำลังโหลดข้อมูล…</p>
+    </div>
 
-    <!-- Section: งานวันนี้ -->
-    <section class="ledger-block">
-      <div class="block-head">
-        <h2>งานวันนี้</h2>
-        <span class="count-pill" id="task-count">0 รายการ</span>
-      </div>
-      <ul class="log-list" id="task-list">
-        <!-- filled by JS -->
-      </ul>
-      <p class="empty-note" id="task-empty" hidden>ไม่มีงานค้างสำหรับวันนี้</p>
-    </section>
+    <!-- สถานะผิดพลาด -->
+    <div id="main-error" class="state-block" role="alert" hidden>
+      <p id="main-error-message">โหลดข้อมูลไม่สำเร็จ</p>
+      <button type="button" id="retry-button" class="retry-button">ลองใหม่อีกครั้ง</button>
+    </div>
 
-    <!-- Section: ใกล้คลอด -->
-    <section class="ledger-block">
-      <h2>ใกล้คลอด (ภายใน 7 วัน)</h2>
-      <ul class="log-list" id="farrow-list">
-        <!-- filled by JS -->
-      </ul>
-      <p class="empty-note" id="farrow-empty" hidden>ยังไม่มีแม่พันธุ์ใกล้คลอดในสัปดาห์นี้</p>
-    </section>
+    <!-- เนื้อหาจริง -->
+    <div id="main-content" hidden>
 
-    <!-- Section: รออนุมัติ -->
-    <section class="ledger-block">
-      <h2>รออนุมัติ</h2>
-      <ul class="approval-list" id="approval-list">
-        <!-- filled by JS -->
-      </ul>
-      <p class="empty-note" id="approval-empty" hidden>ไม่มีรายการรออนุมัติ</p>
-    </section>
+      <!-- Section: ภาพรวมฟาร์มวันนี้ -->
+      <section class="ledger-block">
+        <h2>ภาพรวมฟาร์มวันนี้</h2>
+        <div class="stat-strip" id="stat-strip">
+          <!-- filled by JS -->
+        </div>
+      </section>
+
+      <!-- Section: งานวันนี้ -->
+      <section class="ledger-block">
+        <div class="block-head">
+          <h2>งานวันนี้</h2>
+          <span class="count-pill" id="task-count">0 รายการ</span>
+        </div>
+        <ul class="log-list" id="task-list">
+          <!-- filled by JS -->
+        </ul>
+        <p class="empty-note" id="task-empty" hidden>ไม่มีงานค้างสำหรับวันนี้</p>
+      </section>
+
+      <!-- Section: ใกล้คลอด -->
+      <section class="ledger-block">
+        <h2>ใกล้คลอด (ภายใน 7 วัน)</h2>
+        <ul class="log-list" id="farrow-list">
+          <!-- filled by JS -->
+        </ul>
+        <p class="empty-note" id="farrow-empty" hidden>ยังไม่มีแม่พันธุ์ใกล้คลอดในสัปดาห์นี้</p>
+      </section>
+
+      <!-- Section: รออนุมัติ -->
+      <section class="ledger-block">
+        <h2>รออนุมัติ</h2>
+        <ul class="approval-list" id="approval-list">
+          <!-- filled by JS -->
+        </ul>
+        <p class="empty-note" id="approval-empty" hidden>ไม่มีรายการรออนุมัติ</p>
+      </section>
+
+    </div>
 
   </main>
 

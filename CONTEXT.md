@@ -9,7 +9,7 @@ Nipponfarm — ระบบจัดการฟาร์มหมูครบ�
 ## สถานะปัจจุบัน (อัปเดตล่าสุด: ดู CHANGELOG.md)
 
 - **เฟส 1 (โครงข้อมูล + Overview):** สร้างหน้าจอแล้ว ใช้ mock data (`js/mock-data.js`) ยังไม่ได้เชื่อม Supabase จริง
-- **Supabase:** ยังไม่ได้สร้างโปรเจกต์ — schema ออกแบบไว้ครบแล้วที่ `docs/schema.sql` / `DATABASE.md` รอรันจริง
+- **Supabase:** ยังไม่ได้สร้างโปรเจกต์ — migration ครบแล้ว (`supabase/migrations/0001` โครงตาราง, `0002` เปิด RLS + policy จริง, `0003` trigger auto-gen tasks) พร้อม `supabase/seed.sql` รอรันจริงตามลำดับ ห้ามให้ client ต่อ Supabase ก่อนรัน `0002` ครบ
 - **เฟส 2-5:** ยังไม่เริ่ม — ดูแผนใน `PRD.md`, มี GitHub Issues แยกตามเฟสแล้ว
 
 ## ต้องอ่านอะไรก่อนแก้โค้ด
@@ -17,7 +17,7 @@ Nipponfarm — ระบบจัดการฟาร์มหมูครบ�
 | ต้องการทำอะไร | อ่านไฟล์นี้ก่อน |
 |---|---|
 | เพิ่ม/แก้ฟีเจอร์ | `PRD.md` — เช็คว่าอยู่ในขอบเขตเฟสไหน |
-| แก้/เพิ่มตารางฐานข้อมูล | `DATABASE.md` และ `docs/schema.sql` |
+| แก้/เพิ่มตารางฐานข้อมูล | `DATABASE.md` และ `supabase/migrations/` (ห้ามแก้ migration เก่าที่ deploy แล้ว — เพิ่มไฟล์ migration ใหม่เสมอ) |
 | เพิ่มหน้าจอใหม่ | `ARCHITECTURE.md` ข้อ 2-3 (โครงสร้างโฟลเดอร์ + data layer pattern) |
 | ต่อ Supabase (query/Edge Function) | `API.md` |
 | จะเปลี่ยนแนวทางที่เคยตัดสินใจไว้ | อ่าน `DECISIONS.md` ก่อน แล้วเพิ่ม ADR ใหม่ ไม่ลบของเดิม |

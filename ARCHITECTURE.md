@@ -42,8 +42,9 @@ Nipponfarm-1992/
 │   ├── pens.html
 │   ├── finance.html
 │   └── staff.html
-├── docs/
-│   └── schema.sql              DDL เต็มทุกเฟส (ดู DATABASE.md)
+├── supabase/
+│   ├── migrations/              DDL จริง แยกไฟล์ตามลำดับ (ดู DATABASE.md)
+│   └── seed.sql                 ข้อมูลตั้งต้น
 ├── icons/
 └── assets/
 ```
@@ -56,12 +57,16 @@ Nipponfarm-1992/
 
 1. มีฟังก์ชัน `get<ชื่อหน้า>Data()` ฟังก์ชันเดียวเป็นจุดเข้าออกข้อมูลของหน้านั้น
 2. ฟังก์ชัน render แยกจากฟังก์ชันดึงข้อมูลเสมอ — สลับจาก mock data ไป Supabase จริง โดยไม่ต้องแก้โค้ด render
-3. ระหว่างเฟสที่ยังไม่เชื่อม Supabase จริง ให้ใช้ mock data ที่มีรูปร่าง (shape) ตรงกับตารางใน `DATABASE.md` ทุกประการ เพื่อสลับได้ทันทีภายหลัง
+3. ระหว่างเฟสที่ยังไม่เชื่อม Supabase จริง ให้ใช้ mock data ที่มีรูปร่าง (shape) ตรงกับตารางใน `DATABASE.md` ทุกประการ เพื่อสลับได้ทันทีภายหลัง วันที่ในข้อมูลตัวอย่างต้องคำนวณ dynamic เทียบกับวันนี้จริงเสมอ ห้าม hardcode ป้ายวันที่/สถานะ (ดู `js/app.js` ฟังก์ชัน `getDueMeta` เป็นตัวอย่าง)
+4. ทุกหน้าต้องมี 3 สถานะ: กำลังโหลด, ผิดพลาด (พร้อมปุ่มลองใหม่), และเนื้อหาจริง — ห้ามปล่อยให้หน้าว่างเปล่าเงียบๆ เมื่อ query ล้มเหลว (ดู `#main-loading`/`#main-error`/`#main-content` ใน `index.html` เป็นแบบอย่าง)
+5. ห้ามใช้ `innerHTML` กับข้อมูลจากฐานข้อมูล/ผู้ใช้ — สร้าง DOM node ด้วย `document.createElement` + `textContent` เท่านั้น (ป้องกัน DOM XSS)
+6. สถานะที่สื่อด้วยสี (เช่น ปกติ/ใกล้ครบกำหนด/เลยกำหนด) ต้องมีข้อความไทยกำกับเสมอ ไม่ใช่พึ่งสีอย่างเดียว — ใส่ `aria-label` สรุปให้ screen reader ด้วย
 
 ## 4. สิทธิ์การเข้าถึงข้อมูล (Auth & RLS)
 
 - ใช้ Supabase Auth ผูกกับตาราง `staff` (role = `admin` หรือ `staff`)
 - ทุกตารางเปิด Row Level Security และมี policy อย่างน้อย 2 แบบ: admin เห็นทั้งหมด, staff เห็นเฉพาะแถวที่เกี่ยวกับตัวเอง (เช่น `cash_advances.staff_id = auth.uid()`)
+- **ต้องรัน `supabase/migrations/0002_enable_rls.sql` ให้ครบก่อนต่อ client เข้า Supabase จริง** ไม่ใช่ทำทีหลังได้ (ดู ADR-009 ใน `DECISIONS.md`)
 - รายละเอียด policy ต่อตาราง → ดู `DATABASE.md`
 
 ## 5. AI อ่านบิล

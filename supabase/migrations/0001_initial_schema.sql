@@ -1,12 +1,10 @@
--- docs/schema.sql
--- โครงสร้างฐานข้อมูลเต็มทุกเฟส (ออกแบบไว้ล่วงหน้า — ยังไม่ได้รันจริงบน Supabase)
--- คำอธิบายเหตุผล/ความสัมพันธ์ของแต่ละตาราง ดูที่ DATABASE.md
--- เมื่อพร้อมเชื่อม Supabase ให้รันไฟล์นี้ผ่าน SQL editor หรือ Supabase migration
--- (RLS policies จะเพิ่มเป็นไฟล์ migration แยกตอนเชื่อมจริง ตามที่ระบุใน DATABASE.md/API.md)
+-- supabase/migrations/0001_initial_schema.sql
+-- ตารางทั้งหมดทุกเฟส (ไม่มี RLS ในไฟล์นี้ — ดู 0002_enable_rls.sql)
+-- คำอธิบายเหตุผล/ความสัมพันธ์ของแต่ละตาราง → DATABASE.md
+-- ห้ามเปิดให้ client (anon/authenticated) เข้าถึงตารางเหล่านี้ก่อนรัน 0002 ให้ครบ
 
 -- ============ เฟส 1: โครงข้อมูลหลัก ============
 
--- พนักงาน/แอดมิน — เชื่อมกับ Supabase Auth
 create table staff (
   id uuid primary key references auth.users(id),
   full_name text not null,
@@ -15,25 +13,22 @@ create table staff (
   created_at timestamptz default now()
 );
 
--- โรงเรือน
 create table buildings (
   id uuid primary key default gen_random_uuid(),
-  name text not null unique,        -- เช่น 'โรงเรือน A', 'โรงเรือน C'
+  name text not null unique,
   created_at timestamptz default now()
 );
 
--- คอก
 create table pens (
   id uuid primary key default gen_random_uuid(),
   building_id uuid references buildings(id),
-  code text not null unique,        -- เช่น 'A-1', 'B-4'
+  code text not null unique,
   capacity int,
-  pos_x numeric,                    -- ตำแหน่งบนผังคอก (ใช้จริงเฟส 3)
+  pos_x numeric,
   pos_y numeric,
   created_at timestamptz default now()
 );
 
--- หมู/แม่พันธุ์
 create table pigs (
   id uuid primary key default gen_random_uuid(),
   ear_tag text not null unique,
@@ -44,22 +39,21 @@ create table pigs (
     status in ('รอผสม', 'ผสมแล้ว', 'ท้อง', 'เลี้ยงลูก', 'หย่านมแล้ว', 'ขายแล้ว', 'ตาย')
   ),
   breeding_count int default 0,
-  expected_farrow_date date,        -- คำนวณ/อัปเดตเมื่อบันทึกเหตุการณ์ "ผสมพันธุ์"
+  expected_farrow_date date,
   created_at timestamptz default now()
 );
 
--- ประเภทงาน — อ้างอิงสำหรับ auto-generate tasks
 create table task_types (
   id uuid primary key default gen_random_uuid(),
-  name text not null unique,        -- เช่น 'ตรวจท้อง', 'ย้ายคอก', 'คลอด', 'หย่านม', 'ซ่อมบำรุง'
-  default_offset_days int           -- เช่น ตรวจท้อง = +21 วันจากวันผสม
+  name text not null unique,
+  default_offset_days int
 );
 
--- งานที่ต้องทำ
 create table tasks (
   id uuid primary key default gen_random_uuid(),
   task_type_id uuid references task_types(id),
-  pig_id uuid references pigs(id),           -- null ได้ ถ้าเป็นงานทั่วไป เช่น ซ่อมบำรุง
+  pig_id uuid references pigs(id),           -- null ได้ ถ้าเป็นงานทั่วไป (เช่น ซ่อมบำรุง)
+                                              -- หา pen ของงานนี้ผ่าน pigs.pen_id (ไม่มีคอลัมน์ pen_id ตรงในตารางนี้ — ดู API.md ข้อ query)
   title text not null,
   due_date date not null,
   assigned_to uuid references staff(id),
@@ -67,8 +61,6 @@ create table tasks (
   created_at timestamptz default now()
 );
 
--- log เหตุการณ์ของหมูแต่ละตัว — เป็นฐานให้ trigger สร้าง tasks อัตโนมัติ
--- และเป็นที่มาของ "ประวัติ" ทั้งหมด (ผสม/ท้อง/คลอด/หย่านม/รักษา) — ดู ADR-006 ใน DECISIONS.md
 create table pig_events (
   id uuid primary key default gen_random_uuid(),
   pig_id uuid references pigs(id) not null,
@@ -80,17 +72,6 @@ create table pig_events (
   recorded_by uuid references staff(id),
   created_at timestamptz default now()
 );
-
--- ตัวอย่าง trigger แนวคิด (เขียนละเอียดตอนเชื่อม Supabase จริง):
--- เมื่อ insert pig_events ที่ event_type = 'ผสมพันธุ์'
---   -> insert เข้า tasks: title = 'ตรวจท้อง', due_date = event_date + 21
---   -> update pigs.status = 'ท้อง', pigs.expected_farrow_date = event_date + 114
-
--- ============ เฟส 2: แม่พันธุ์/ปฏิทิน ============
--- ไม่มีตารางใหม่ — ใช้ pigs, pig_events, tasks, task_types จากเฟส 1
-
--- ============ เฟส 3: ผังคอก ============
--- ไม่มีตารางใหม่ — ใช้ buildings, pens.pos_x/pos_y/capacity จากเฟส 1
 
 -- ============ เฟส 4: การเงิน ============
 
